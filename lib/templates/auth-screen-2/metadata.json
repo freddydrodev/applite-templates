@@ -1,0 +1,6 @@
+{
+  "name": "Authentication Screen 2",
+  "description": "A complete authentication screen with login and registration",
+  "files": ["auth_screen_2.dart"],
+  "dependencies": []
+}
