@@ -41,25 +41,6 @@ class WelcomeScreen1 extends StatelessWidget {
               fit: BoxFit.contain,
             ),
           ),
-          PageViewModel(
-            title: "Autres services",
-            body:
-                "Nous vous proposons d'autres services tels que la plomberie, l'électricité, la serrurerie, etc...",
-            image: Image.asset(
-              'assets/images/intro/3.png',
-              width: 220,
-              fit: BoxFit.contain,
-            ),
-          ),
-          PageViewModel(
-            title: "Bienvenue dans la famille !",
-            body: "Nous sommes ravis de vous voir rejoindre notre communauté !",
-            image: Image.asset(
-              'assets/images/intro/4.png',
-              width: 220,
-              fit: BoxFit.contain,
-            ),
-          ),
         ],
         showNextButton: false,
         showDoneButton: false,
