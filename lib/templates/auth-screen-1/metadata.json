@@ -1,6 +1,9 @@
 {
   "name": "Authentication Screen 1",
   "description": "A complete authentication screen with login and registration",
-  "files": ["auth_screen_1.dart"],
+  "files": ["screens/auth_screen_1.dart"],
+  "services": [],
+  "models": [],
+  "widgets": [],
   "dependencies": []
 }

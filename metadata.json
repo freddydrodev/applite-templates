@@ -3,10 +3,12 @@
   "description": "For all templates",
   "files": [
     "screens/auth_screen_1.dart",
-    "services/auth_service.dart",
-    "models/user_model.dart",
-    "widgets/auth_button.dart",
-    "widgets/text_input_field.dart"
+    "services/local_service.dart",
+    "models/local_model.dart",
+    "widgets/local_widget.dart"
   ],
+  "services": ["global_service.dart"],
+  "models": ["global_model.dart"],
+  "widgets": ["global_widget.dart"],
   "dependencies": ["provider", "http:^0.13.5", "shared_preferences:^2.1.1"]
 }
