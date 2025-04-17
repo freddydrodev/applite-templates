@@ -1,6 +1,6 @@
 {
-  "name": "Base Structure",
-  "description": "For all templates",
+  "name": "Name of the template",
+  "description": "Description of the template",
   "files": [
     "screens/auth_screen_1.dart",
     "services/local_service.dart",

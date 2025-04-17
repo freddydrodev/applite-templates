@@ -1,0 +1,230 @@
+enum StoreOptionType {
+    select
+    radio
+    checkbox
+    color
+    image
+}
+
+model StoreSeller {
+    id                   String                 @id @default(auto()) @map("_id") @db.ObjectId
+    app                  App                    @relation(fields: [appId], references: [id])
+    appId                String                 @db.ObjectId
+    fullname             String /// @encrypted
+    telephone            String                 @unique /// @encrypted
+    telephoneHash        String?                @unique /// @encryption:hash(telephone)
+    email                String                 @unique /// @encrypted
+    emailHash            String?                @unique /// @encryption:hash(email)
+    password             String? /// @encrypted
+    avatar               String?
+    country              String                 @default("CI")
+    isDefault            Boolean                @default(false)
+    description          String? /// @encrypted  // Added seller description for storefront display
+    address              String? /// @encrypted  // Added physical address for seller
+    status               String                 @default("active") // Added status field to manage seller accounts (active, suspended, inactive)
+    createdAt            DateTime               @default(now())
+    updatedAt            DateTime               @updatedAt
+    categories           StoreCategory[]
+    badges               StoreBadge[]
+    options              StoreOption[]
+    products             StoreProduct[]
+    optionValues         StoreOptionValue[]
+    StoreOptionInVariant StoreOptionInVariant[]
+    StockProductImage    StockProductImage[]
+    StoreProductVariant  StoreProductVariant[]
+    StoreProductReview   StoreProductReview[]
+
+    @@map("StoreSellers")
+}
+
+model StoreCategory {
+    id            String          @id @default(auto()) @map("_id") @db.ObjectId
+    app           App             @relation(fields: [appId], references: [id])
+    appId         String          @db.ObjectId
+    image         String?
+    name          String /// @encrypted
+    description   String? /// @encrypted  // Added category description for better SEO
+    slug          String
+    seller        StoreSeller     @relation(fields: [sellerId], references: [id])
+    sellerId      String          @db.ObjectId
+    parentId      String?         @db.ObjectId
+    parent        StoreCategory?  @relation("SubCategories", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    subCategories StoreCategory[] @relation("SubCategories")
+    isActive      Boolean         @default(true) // Added to enable/disable categories
+    sortOrder     Int             @default(0) // Added for custom category ordering
+    createdAt     DateTime        @default(now())
+    updatedAt     DateTime        @updatedAt
+    products      StoreProduct[]
+
+    @@map("StoreCategories")
+}
+
+model StoreBadge {
+    id          String         @id @default(auto()) @map("_id") @db.ObjectId
+    image       String?
+    name        String /// @encrypted
+    description String? /// @encrypted  // Added badge description
+    slug        String
+    color       String? // Added color for badge styling
+    app         App            @relation(fields: [appId], references: [id])
+    appId       String         @db.ObjectId
+    seller      StoreSeller    @relation(fields: [sellerId], references: [id])
+    sellerId    String         @db.ObjectId
+    isActive    Boolean        @default(true) // Added to enable/disable badges
+    createdAt   DateTime       @default(now())
+    updatedAt   DateTime       @updatedAt
+    products    StoreProduct[]
+
+    @@map("StoreBadges")
+}
+
+model StoreOptionValue {
+    id               String                 @id @default(auto()) @map("_id") @db.ObjectId
+    text             String /// @encrypted
+    image            String? // Added image support for option values (e.g. color swatches)
+    sortOrder        Int                    @default(0) // Added for custom ordering of option values
+    createdAt        DateTime               @default(now())
+    updatedAt        DateTime               @updatedAt
+    option           StoreOption?           @relation(fields: [optionId], references: [id])
+    optionId         String?                @db.ObjectId
+    optionInVariants StoreOptionInVariant[]
+    seller           StoreSeller?           @relation(fields: [sellerId], references: [id])
+    sellerId         String?                @db.ObjectId
+    app              App                    @relation(fields: [appId], references: [id])
+    appId            String                 @db.ObjectId
+
+    @@map("StoreOptionValues")
+}
+
+model StoreOption {
+    id          String             @id @default(auto()) @map("_id") @db.ObjectId
+    name        String /// @encrypted
+    description String? /// @encrypted  // Added option description
+    type        StoreOptionType    @default(select) // Added option type for different display modes
+    values      StoreOptionValue[]
+    app         App                @relation(fields: [appId], references: [id])
+    appId       String             @db.ObjectId
+    seller      StoreSeller        @relation(fields: [sellerId], references: [id])
+    sellerId    String             @db.ObjectId
+    isRequired  Boolean            @default(false) // Added to mark options as required
+    isActive    Boolean            @default(true) // Added to enable/disable options
+    createdAt   DateTime           @default(now())
+    updatedAt   DateTime           @updatedAt
+
+    @@map("StoreOptions")
+}
+
+model StoreOptionInVariant {
+    id        String              @id @default(auto()) @map("_id") @db.ObjectId
+    value     StoreOptionValue    @relation(fields: [valueId], references: [id])
+    valueId   String              @db.ObjectId
+    variant   StoreProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+    variantId String              @db.ObjectId
+    createdAt DateTime            @default(now())
+    updatedAt DateTime            @updatedAt
+    seller    StoreSeller         @relation(fields: [sellerId], references: [id])
+    sellerId  String              @db.ObjectId
+    app       App                 @relation(fields: [appId], references: [id])
+    appId     String              @db.ObjectId
+
+    @@map("StoreOptionInVariants")
+}
+
+model StockProductImage {
+    id         String              @id @default(auto()) @map("_id") @db.ObjectId
+    url        String
+    providerId String?
+    variant    StoreProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+    variantId  String              @db.ObjectId
+    seller     StoreSeller         @relation(fields: [sellerId], references: [id])
+    sellerId   String              @db.ObjectId
+    app        App                 @relation(fields: [appId], references: [id])
+    appId      String              @db.ObjectId
+
+    @@map("StockProductImages")
+}
+
+model StoreProduct {
+    id          String                @id @default(auto()) @map("_id") @db.ObjectId
+    name        String /// @encrypted
+    description String? /// @encrypted  // Added product description
+    slug        String
+    sku         String?               @unique // Added SKU for inventory management
+    app         App                   @relation(fields: [appId], references: [id])
+    appId       String                @db.ObjectId
+    seller      StoreSeller           @relation(fields: [sellerId], references: [id])
+    sellerId    String                @db.ObjectId
+    badge       StoreBadge?           @relation(fields: [badgeId], references: [id])
+    badgeId     String?               @db.ObjectId
+    category    StoreCategory         @relation(fields: [categoryId], references: [id])
+    categoryId  String                @db.ObjectId
+    isActive    Boolean               @default(true) // Added to enable/disable products
+    isFeatured  Boolean               @default(false) // Added for featured products
+    rating      Float                 @default(0) // Added average rating
+    reviewCount Int                   @default(0) // Added review count
+    createdAt   DateTime              @default(now())
+    updatedAt   DateTime              @updatedAt
+    variants    StoreProductVariant[]
+    reviews     StoreProductReview[]
+
+    @@map("StoreProducts")
+}
+
+type StockProductDimension {
+    length Float?
+    width  Float?
+    height Float?
+}
+
+model StoreProductVariant {
+    id             String                 @id @default(auto()) @map("_id") @db.ObjectId
+    product        StoreProduct           @relation(fields: [productId], references: [id], onDelete: Cascade)
+    productId      String                 @db.ObjectId
+    sku            String?                @unique // Added variant-level SKU
+    images         StockProductImage[]
+    price          Float
+    discountPrice  Float?
+    compareAtPrice Float? // Added for sale pricing
+    costPerItem    Float? // Added for profit calculations
+    isDefault      Boolean                @default(false)
+    quantity       Int
+    lowStockAlert  Int                    @default(5) // Added low stock notification threshold
+    weight         Float? // Added for shipping calculations
+    weightUnit     String?                @default("kg")
+    dimensions     StockProductDimension? // Added for shipping calculations {length, width, height}
+    infinite       Boolean                @default(false)
+    reviews        StoreProductReview[]
+    options        StoreOptionInVariant[]
+    rating         Float                  @default(0)
+    createdAt      DateTime               @default(now())
+    updatedAt      DateTime               @updatedAt
+    seller         StoreSeller            @relation(fields: [sellerId], references: [id])
+    sellerId       String                 @db.ObjectId
+    app            App                    @relation(fields: [appId], references: [id])
+    appId          String                 @db.ObjectId
+
+    @@map("StoreProductVariants")
+}
+
+model StoreProductReview {
+    id         String               @id @default(auto()) @map("_id") @db.ObjectId
+    product    StoreProduct         @relation(fields: [productId], references: [id])
+    productId  String               @db.ObjectId
+    customer   Customer             @relation(fields: [customerId], references: [id])
+    customerId String               @db.ObjectId
+    rating     Float
+    title      String? /// @encrypted  // Added review title
+    comment    String? /// @encrypted
+    images     String[] // Added support for review images
+    isVerified Boolean              @default(false) // Added verification status
+    createdAt  DateTime             @default(now())
+    updatedAt  DateTime             @updatedAt
+    variant    StoreProductVariant? @relation(fields: [variantId], references: [id])
+    variantId  String?              @db.ObjectId
+    seller     StoreSeller          @relation(fields: [sellerId], references: [id])
+    sellerId   String               @db.ObjectId
+    app        App                  @relation(fields: [appId], references: [id])
+    appId      String               @db.ObjectId
+}
+
+// Removed StoreOrder and StoreOrderItem models as they had validation errors with Customer relation

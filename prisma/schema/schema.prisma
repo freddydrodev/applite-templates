@@ -1,0 +1,96 @@
+generator client {
+  provider        = "prisma-client-js" // no `-js` at the end
+  // output          = "../../src/generated/prisma" // `output` is required
+  // moduleFormat    = "cjs" // or "esm" | `"cjs"` for CommonJS
+  previewFeatures = ["prismaSchemaFolder"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Plan {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String /// @encrypted
+  monthlyFee  Float
+  yearlyFee   Float
+  soon        Boolean? @default(false)
+  popular     Boolean? @default(false)
+  free        Boolean? @default(false)
+  disabled    Boolean?
+  buttonText  String   @default("Commencer")
+  features    String[]
+  description String? /// @encrypted
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  apps        App[]
+
+  @@map("Plans")
+}
+
+model User {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  nom_de_famille String /// @encrypted
+  prenom         String /// @encrypted
+  telephone      String   @unique /// @encrypted
+  telephoneHash  String?  @unique /// @encryption:hash(telephone)
+  email          String   @unique /// @encrypted
+  emailHash      String?  @unique /// @encryption:hash(email)
+  password       String /// @encrypted
+  sexe           Sexe?
+  bloque         Boolean?
+  avatar         String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  createdBy      String   @default("API") // THIS IS SUPPOSE TO BE A USER ID
+  apiKey         String   @unique
+  appsOwned      App[]
+  members        Member[]
+
+  @@map("Users")
+}
+
+model App {
+  id                    String                 @id @default(auto()) @map("_id") @db.ObjectId
+  name                  String /// @encrypted
+  slug                  String                 @unique
+  plan                  Plan                   @relation(fields: [planId], references: [id])
+  description           String? /// @encrypted
+  apiKey                String                 @unique
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  owner                 User                   @relation(fields: [ownerId], references: [id])
+  ownerId               String                 @db.ObjectId
+  members               Member[]
+  planId                String                 @db.ObjectId
+  customers             Customer[]
+  transactions          CustomerTransaction[]
+  addresses             Address[]
+  // STORE KEYS
+  storeCategories       StoreCategory[]
+  storeSellers          StoreSeller[]
+  storeBadges           StoreBadge[]
+  storeOptions          StoreOption[]
+  storeProducts         StoreProduct[]
+  storeProductVariants  StoreProductVariant[]
+  storeProductReviews   StoreProductReview[]
+  storeOptionValues     StoreOptionValue[]
+  storeOptionInVariants StoreOptionInVariant[]
+  stockProductImages    StockProductImage[]
+
+  @@map("Apps")
+}
+
+model Member {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  app       App        @relation(fields: [appId], references: [id])
+  appId     String     @db.ObjectId
+  user      User       @relation(fields: [userId], references: [id])
+  role      MemberRole @default(USER)
+  userId    String     @db.ObjectId
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("Members")
+}

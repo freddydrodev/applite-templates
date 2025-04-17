@@ -1,0 +1,48 @@
+enum Sexe {
+    M
+    F
+}
+
+enum MemberRole {
+    ADMIN
+    USER
+}
+
+enum PlateformType {
+    STORE
+    TRANSPORT
+    RESTAURATION
+    MULTI_SERVICE
+    E_LEARNING
+}
+
+enum ModuleType {
+    MONSMSPRO
+    DUTICOTAC
+}
+
+enum Currency {
+    USD
+    EUR
+    XOF
+    XAF
+}
+
+enum TransactionStatus {
+    PENDING
+    CONFIRMED
+    CANCELLED
+    FAILED
+}
+
+enum TransactionProvider {
+    PAYPAL
+    STRIPE
+    CASH
+    OM_CI
+    MTN_CI
+    MOOV_CI
+    WAVE_CI
+    CREDIT_CARD
+    IAP
+}

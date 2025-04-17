@@ -1,0 +1,58 @@
+model Customer {
+    id            String                @id @default(auto()) @map("_id") @db.ObjectId
+    app           App                   @relation(fields: [appId], references: [id])
+    appId         String                @db.ObjectId
+    fullname      String /// @encrypted
+    telephone     String                @unique /// @encrypted
+    telephoneHash String?               @unique /// @encryption:hash(telephone)
+    email         String?               @unique /// @encrypted
+    emailHash     String?               @unique /// @encryption:hash(email)
+    password      String? /// @encrypted
+    gender        Sexe?
+    dob           DateTime?
+    plateforms    PlateformType[]
+    country       String
+    createdAt     DateTime              @default(now())
+    updatedAt     DateTime              @updatedAt
+    transactions  CustomerTransaction[]
+    addresses     Address[]
+    storeReviews  StoreProductReview[]
+
+    @@map("Customers")
+}
+
+model Address {
+    id         String   @id @default(auto()) @map("_id") @db.ObjectId
+    app        App      @relation(fields: [appId], references: [id])
+    appId      String   @db.ObjectId
+    customer   Customer @relation(fields: [customerId], references: [id])
+    customerId String   @db.ObjectId
+    name       String
+    address    String
+    longitude  Float    @default(5.376930951261369)
+    latitude   Float    @default(-3.9987789827709572)
+    city       String   @default("Abidjan")
+    country    String   @default("CI")
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    @@map("Addresses")
+}
+
+model CustomerTransaction {
+    id         String            @id @default(auto()) @map("_id") @db.ObjectId
+    ref        String            @unique /// @encrypted
+    app        App               @relation(fields: [appId], references: [id])
+    appId      String            @db.ObjectId
+    customer   Customer          @relation(fields: [customerId], references: [id])
+    customerId String            @db.ObjectId
+    plateform  PlateformType
+    status     TransactionStatus @default(PENDING)
+    productId  String
+    amount     Float
+    currency   Currency          @default(XOF)
+    createdAt  DateTime          @default(now())
+    updatedAt  DateTime          @updatedAt
+
+    @@map("CustomerTransactions")
+}

@@ -1,0 +1,99 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: General Rules and informations
+globs: 
+alwaysApply: true
+---
+
+# Information
+This project is used to add template using a cli called applite. 
+The cli will fetch on this project from github.
+The goal of this project is to store templates of pages and widgets, services required to fetch api, models of data.
+templates, serives and models will be stored into a folder named packages into the lib folder.
+this project will also be used to test project. the test project will be store into app folder into the lib folder.
+the generated project are from different type (STORE,TRANSPORT,RESTAURATION,MULTI_SERVICE,E_LEARNING)
+
+# Configuration
+
+- Page template are made into lib/packages/pages folder
+- Widget template are made into lib/packages/widgets folder
+- Templates are folders in kebab-case and file in snake_case both with the same name
+- Templates are stored in a screens or widgets folder base on the template type
+- Hive Models are implemented with [hive_ce](mdc:https:/pub.dev/packages/hive_ce) and [hive_ce_flutter](mdc:https:/pub.dev/packages/hive_ce_flutter) for local storage db
+- Services api calls are made with [dio](mdc:https:/pub.dev/packages/dio) and are sync with model using hive adapter
+- Each template has metadata.json file which show services, models, and dependencies used in the project
+- Models name convention is the model name in camelcase with the first letter un Uppercase and Model at the end (eg: StoreUserModel)
+- Models Schemas are splitted and stored into [app.prisma](mdc:prisma/schema/app.prisma), [type.prisma](mdc:prisma/schema/type.prisma), [store.prisma](mdc:prisma/schema/store.prisma), [schema.prisma](mdc:prisma/schema/schema.prisma) files
+- Models schemas files use the name of the project type, any other file name is used across projects
+- Prisma models into [app.prisma](mdc:prisma/schema/app.prisma), [type.prisma](mdc:prisma/schema/type.prisma), [schema.prisma](mdc:prisma/schema/schema.prisma) are core Hive Models and are stored into core folder
+- Each model should be store on its own file respecting naming convention
+- Models are stored into folder base on the model type (STORE,TRANSPORT,RESTAURATION,MULTI_SERVICE,E_LEARNING) in lowercase
+- Avoid using models.dart, services.dart, adapters.dart, etc... to export all models, services or templates
+- Each project type should have its own adapters as (store_adapters, transport_adapters, etc...)
+- Core_adapters should also be generated for core Hive models (eg: AppModel, CustomerModel, etc...)
+- Make sure prisma field including Hash in its name (eg: passwordHash, etc...) are not implemented into models
+- Model adapters should be stored in a folder called adapters and into files based on project type and core for common adapters
+- Model file name should start by the project type and end with model using snake_case (eg: store_product_model.dart)
+- Make sure hive models respect naming convention for file and class,
+- Make sure each model have its own file
+- Make sure Hive model adapater typeId is using accross project this
+- Latest Hive docs is available here https://pub.dev/packages/hive_ce
+- Create models using [hive_model.dart](mdc:hive_model.dart)
+- Function like registerStoreAdapters, registerTransportAdapters, registerCoreAdapters, etc... should be generated to register adapter base on projects into individual files
+- Empty folder into packages should have .gitkeep file
+- Make sure to run dart run build_runner build --delete-conflicting-outputs after all models generation
+- Make sure all models adapters is also generated
+
+## Metadata.json Structure
+[metadata.json](mdc:metadata.json)
+
+## Current Project Structure
+This is the current project structure:
+
+```
+current-project/
+├── lib/
+│   ├── packages/                           # Elements to download
+│   │   ├── models/                         # Database models
+│   │   │   ├── adapters/                   # adapters used across all type of project
+│   │   │   │   └── (store.dart)            # list of adapter
+│   │   │   ├── core/                       # models used across all type of project
+│   │   │   │   └── (models.dart)           # list of models
+│   │   │   └── store/                      # this can be STORE,TRANSPORT,RESTAURATION,MULTI_SERVICE,E_LEARNING in lower case
+│   │   │       └── (models.dart)           # list of models related to the current project type
+│   │   ├── services/                       # API services
+│   │   │   ├── core/                       # services used across all type of project
+│   │   │   │   └── (services.dart)         # list of services
+│   │   │   └── store/                      # this can be STORE,TRANSPORT,RESTAURATION,MULTI_SERVICE,E_LEARNING in lower case
+│   │   │       └── (services.dart)         # list of services related to the current project type
+│   │   ├── pages/                          # Reusable pages
+│   │   │   └── template-name/              # template name in kebab-case
+│   │   │       ├── screens/                # unique screen template with pages
+│   │   │       │   └── template_name.dart  # template name in snake_case
+│   │   │       ├── metadata.json           # Template configuration file
+│   │   │       └── any other files         # extra files
+│   │   ├── flows/                          # Reusable flows (generated drawer, bottom tab, etc... type layout with authentication check)
+│   │   │   └── template-name/              # template name in kebab-case
+│   │   │       ├── screens/                # unique screen template with pages
+│   │   │       │   └── template_name.dart  # template name in snake_case
+│   │   │       ├── metadata.json           # Template configuration file
+│   │   │       └── any other files         # extra files
+│   │   └── widgets/                        # Reusable widgets
+│   │   │   └── template-name/              # template name in kebab-case
+│   │   │       ├── screens/                # unique screen template with pages
+│   │   │       │   └── template_name.dart  # template name in snake_case
+│   │   │       ├── metadata.json           # Template configuration file
+│   │   │       └── any other files         # extra files
+│   ├── app/                                # Files to try the templates
+│   │   ├── screens/                        # Test screens
+│   │   ├── constants/                      # Any constants file
+│   │   └── utils/                          # Any utils file
+│   ├── main.dart                           # Entry file
+├── assets/                                 # Project assets
+└── pubspec.yaml                            # Flutter dependencies
+```
+
