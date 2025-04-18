@@ -7,6 +7,7 @@ import 'package:applite_templates/packages/models/core/address_model.dart';
 import 'package:applite_templates/packages/models/core/app_model.dart';
 import 'package:applite_templates/packages/models/core/customer_model.dart';
 import 'package:applite_templates/packages/models/core/customer_transaction_model.dart';
+import 'package:applite_templates/packages/models/core/welcome_model.dart';
 import 'package:applite_templates/packages/models/store/stock_product_image_model.dart';
 import 'package:applite_templates/packages/models/store/store_badge_model.dart';
 import 'package:applite_templates/packages/models/store/store_category_model.dart';
@@ -34,5 +35,6 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(StoreProductReviewModelAdapter());
     registerAdapter(StoreProductVariantModelAdapter());
     registerAdapter(StoreSellerModelAdapter());
+    registerAdapter(WelcomeModelAdapter());
   }
 }

@@ -78,6 +78,7 @@ model App {
   storeOptionValues     StoreOptionValue[]
   storeOptionInVariants StoreOptionInVariant[]
   stockProductImages    StockProductImage[]
+  welcomeScreensItems   WelcomeScreenItem[]
 
   @@map("Apps")
 }

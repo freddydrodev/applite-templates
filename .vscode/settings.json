@@ -35,5 +35,7 @@
     },
     "minimap.background": "#00000000",
     "scrollbar.shadow": "#00000000"
-  }
+  },
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "[dart]": { "editor.defaultFormatter": "Dart-Code.dart-code" }
 }

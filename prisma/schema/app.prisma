@@ -56,3 +56,26 @@ model CustomerTransaction {
 
     @@map("CustomerTransactions")
 }
+
+enum FileType {
+    image
+    video
+    audio
+    pdf
+    docx
+}
+
+model WelcomeScreenItem {
+    id            String        @id @default(auto()) @map("_id") @db.ObjectId
+    fileUrl       String
+    fileType      FileType      @default(image)
+    title         String? /// @encrypted
+    description   String? /// @encrypted
+    app           App           @relation(fields: [appId], references: [id])
+    appId         String        @db.ObjectId
+    plateformType PlateformType
+    createdAt     DateTime      @default(now())
+    updatedAt     DateTime      @updatedAt
+
+    @@map("WelcomeScreenItems")
+}

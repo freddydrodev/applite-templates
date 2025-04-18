@@ -1,0 +1,9 @@
+{
+  "name": "Welcome Screen 1",
+  "description": "A complete welcome screen with login and / or registration",
+  "files": ["screens/welcome_screen.dart"],
+  "services": [],
+  "models": [],
+  "widgets": [],
+  "dependencies": ["introduction_screen", "url_launcher"]
+}
