@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        primaryColor: const Color.fromARGB(255, 17, 20, 35),
+        primaryColor: Colors.red, // const Color.fromARGB(255, 17, 20, 35),
       ),
       home: const WelcomeAuthFlow(
         welcomeScreen: WelcomeScreen(),
