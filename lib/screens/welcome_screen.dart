@@ -1,1 +1,1 @@
-export 'package:applite_templates/packages/pages/welcome-4/screens/welcome_screen.dart';
+export 'package:applite_templates/packages/pages/welcome-10/screens/welcome_screen.dart';

@@ -19,37 +19,36 @@ class PrivacyText extends StatelessWidget {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-        style: smallDefault.copyWith(
-          color: Colors.white,
-        ),
         children: [
-          const TextSpan(
-            text: 'By clicking on the button below, you agree to our ',
+          TextSpan(
+            text: "En utilisant cette application, vous acceptez nos ",
+            style: smallDefault,
           ),
           TextSpan(
-            text: 'Terms of Use',
+            text: "conditions d'utilisation",
             style: smallLink,
             recognizer: TapGestureRecognizer()
               ..onTap = () async {
-                final url = Uri.parse('https://example.com/terms');
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url);
-                }
+                await launchUrl(
+                  Uri.parse(
+                    'https://example.com/conditions-dutilisation',
+                  ),
+                );
               },
           ),
-          const TextSpan(text: ' and '),
+          TextSpan(text: " et notre ", style: smallDefault),
           TextSpan(
-            text: 'Privacy Policy',
+            text: "politique de confidentialité.",
             style: smallLink,
             recognizer: TapGestureRecognizer()
               ..onTap = () async {
-                final url = Uri.parse('https://example.com/privacy');
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url);
-                }
+                await launchUrl(
+                  Uri.parse(
+                    'https://example.com/politique-de-confidentialite',
+                  ),
+                );
               },
           ),
-          const TextSpan(text: '.'),
         ],
       ),
     );

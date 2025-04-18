@@ -26,7 +26,7 @@ class WelcomeScreen extends StatelessWidget {
             body:
                 "Votre application de services à domicile qui vous facilite la vie.",
             image: Image.asset(
-              'assets/images/intro/1.png',
+              'assets/images/welcome/watch.png',
               height: 270,
               fit: BoxFit.contain,
             ),
@@ -36,7 +36,7 @@ class WelcomeScreen extends StatelessWidget {
             body:
                 "Nous vous proposons des services de nettoyage de votre maison, bureau, hôtel, etc...",
             image: Image.asset(
-              'assets/images/intro/2.png',
+              'assets/images/welcome/watch.png',
               height: 270,
               fit: BoxFit.contain,
             ),
@@ -44,7 +44,7 @@ class WelcomeScreen extends StatelessWidget {
         ],
         showNextButton: false,
         showDoneButton: false,
-        dotsDecorator: DotsDecorator(
+        dotsDecorator: const DotsDecorator(
           size: Size(8, 8),
           activeSize: Size(30, 8),
           activeShape: RoundedRectangleBorder(
@@ -52,7 +52,7 @@ class WelcomeScreen extends StatelessWidget {
           ),
         ),
         globalFooter: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             spacing: 20,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -65,7 +65,7 @@ class WelcomeScreen extends StatelessWidget {
                   ).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
                   foregroundColor: Colors.white,
                   backgroundColor: Theme.of(context).primaryColor,
-                  fixedSize: Size.fromHeight(50),
+                  fixedSize: const Size.fromHeight(50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -75,7 +75,7 @@ class WelcomeScreen extends StatelessWidget {
                   // TODO GO TO NEXT PAGE OR IMPLEMENT AUTH
                   // TODO CHECK HOW TO MAKE IMPLEMENTATION AS MODULES
                 },
-                child: Text("Connexion"),
+                child: const Text("Connexion"),
               ),
               RichText(
                 textAlign: TextAlign.center,
